@@ -1,9 +1,11 @@
+const { ApolloServerPluginInlineTrace } = require("apollo-server-core");
 const { ApolloServer } = require('apollo-server');
 const { resolvers, typeDefs } = require('./schema');
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,  
+  resolvers,
+  plugins: [ApolloServerPluginInlineTrace()],
 });
 
 server.listen().then(({ url, subscriptionsUrl }) => {

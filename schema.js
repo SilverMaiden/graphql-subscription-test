@@ -11,6 +11,7 @@ const typeDefs = gql`
 
   type Query {
     posts: [Post]
+    other: String
   }
 
   type Mutation {
@@ -24,6 +25,19 @@ const typeDefs = gql`
 `
 const posts = []
 const resolvers = {
+  Post: {
+    author: () => {
+      return new Promise((resolve) =>{
+        setTimeout(() => resolve('author'), 1000)
+      })
+    },
+    comment: () => {
+      return new Promise((resolve) =>{
+        setTimeout(() => resolve('comment'), 10000)
+      })
+    }
+  },
+
   Subscription: {
     postAdded: {
       subscribe: () => { 
@@ -35,6 +49,11 @@ const resolvers = {
     posts(root, args, context) {
       return posts;
     },
+    other: () => {
+      return new Promise((resolve) =>{
+        setTimeout(() => resolve('other'), 500)
+      })
+    }
   },
   Mutation: {
     addPost(root, args, context) {
