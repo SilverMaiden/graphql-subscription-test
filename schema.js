@@ -1,6 +1,35 @@
-const { PubSub, gql } = require('apollo-server');
+//const { PubSub, gql } = require('apollo-server');
 
-const pubsub = new PubSub();
+const { buildSchema } = require('graphql');
+
+// Construct a schema, using GraphQL schema language
+const schema = buildSchema(`
+  type Query {
+    hello: String
+  }
+  type Subscription {
+    greetings: String
+  }
+`);
+
+// The roots provide resolvers for each GraphQL operation
+const roots = {
+  query: {
+    hello: () => 'Hello World!',
+  },
+  subscription: {
+    greetings: async function* sayHiIn5Languages() {
+      for (const hi of ['Hi', 'Bonjour', 'Hola', 'Ciao', 'Zdravo']) {
+        yield { greetings: hi };
+      }
+    },
+  },
+};
+
+module.exports = { schema, roots }
+
+
+/* const pubsub = new PubSub();
 
 const POST_ADDED = 'POST_ADDED';
 
@@ -65,4 +94,4 @@ const resolvers = {
 };
 
 
-module.exports = { resolvers, typeDefs }
+module.exports = { resolvers, typeDefs } */
