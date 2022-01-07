@@ -1,18 +1,22 @@
-const { ApolloServerPluginInlineTrace } = require("apollo-server-core");
 const { ApolloServer } = require('apollo-server');
 const { resolvers, typeDefs } = require('./schema');
+const { ApolloServerPluginInlineTrace, ApolloServerPluginLandingPageProductionDefault, ApolloServerPluginLandingPageLocalDefault } = require("apollo-server-core");
 
+
+console.log('honk, ', ApolloServerPluginLandingPageProductionDefault)
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // cors: false,
-  // introspection: false,
   subscriptions: {
     onConnect: (connectionParams) => {
       console.log('hello', connectionParams)
     }
   },
-  plugins: [ApolloServerPluginInlineTrace()],
+  plugins: [
+    ApolloServerPluginInlineTrace(),
+    ApolloServerPluginLandingPageLocalDefault({
+      footer: false,
+    })  ],
 });
 
 server.listen().then(({ url, subscriptionsUrl }) => {
